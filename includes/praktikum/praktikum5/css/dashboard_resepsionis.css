@@ -1,0 +1,157 @@
+body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #4FC3F7;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            width: 40px;
+            height: 40px;
+            background-color: white;
+            border-radius: 50%;
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 18px;
+        }
+        .content {
+            padding: 30px;
+        }
+        .form-box {
+            background: #f7f7f7;
+            padding: 24px;
+            border-radius: 8px;
+            max-width: 400px;
+            margin: 40px auto;
+        }
+        .form-box label {
+            display: block;
+            margin-bottom: 8px;
+        }
+        .form-box input, .form-box select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+        }
+        .form-box button {
+            padding: 8px 20px;
+            background: #4FC3F7;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .form-box button:hover {
+            background: #039be5;
+        }
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+        /* .tambah-btn {
+            padding: flex;
+            background: #4FC3F7;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.2s;
+            display: inline-block;
+        }
+        .tambah-btn:hover {
+            background: #039be5;
+            text-decoration: underline;
+        } */
+        .back-btn {
+            color: #6a1b9a;
+            text-decoration: none ;
+            font-size: 18px
+        }
+        .back-btn:hover  {
+            text-decoration: underline;
+        }
+        .msg-success {
+            color: green;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .msg-error {
+            color: red;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .menu-container {
+            display: flex;
+            gap: 32px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+        .menu-card {
+            background: #e3f2fd;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 32px 24px;
+            width: 220px;
+            text-align: center;
+            transition: box-shadow 0.2s;
+        }
+        .menu-card:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+        .menu-card h4 {
+            margin-bottom: 12px;
+            color: #039be5;
+        }
+        .menu-card p {
+            margin-bottom: 18px;
+            color: #333;
+        }
+        .menu-card a {
+            display: inline-block;
+            padding: 8px 18px;
+            background: #4FC3F7;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .menu-card a:hover {
+            background: #039be5;
+        }
+        .menu-card .icon {
+            font-size: 38px;
+            margin-bottom: 10px;
+            color: #039be5;
+        }
+        .menu-dokter {
+            background: #fffde7;
+            border: 1px solid #ffe082;
+        }
+        .menu-dokter h4 {
+            color: #fbc02d;
+        }
+        .menu-dokter a {
+            background: #fbc02d;
+        }
+        .menu-dokter a:hover {
+            background: #f9a825;
+        }
