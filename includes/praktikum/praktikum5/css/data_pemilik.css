@@ -1,0 +1,13 @@
+/* CSS untuk halaman data_pemilik.php */
+.pemilik-container { max-width: 800px; margin: 32px auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 8px #0001; padding: 32px; }
+.pemilik-container h2 { text-align: center; color: #222; margin-bottom: 24px; }
+form { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 24px; }
+input[type="text"], select { padding: 8px; border: 1px solid #b7e4c7; border-radius: 5px; min-width: 120px; }
+button, a.button { background: #4FC3F7; color: #fff; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; text-decoration: none; transition: background 0.2s; }
+button:hover, a.button:hover { background: #0288d1; }
+a.batal { background: #adb5bd; color: #222; margin-left: 8px; }
+table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+th, td { padding: 10px 8px; border-bottom: 1px solid #b7e4c7; text-align: left; }
+th { background: #b7e4c7; color: #222; }
+tr:nth-child(even) { background: #f1faee; }
+.aksi-link { margin-right: 8px; }
