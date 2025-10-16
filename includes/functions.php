@@ -4,7 +4,7 @@ function dbConnect() {
     $host = 'localhost'; // Database host
     $username = 'root'; // Database username
     $password = ''; // Database password
-    $database = 'uts_pbdprak'; // Database name
+    $database = 'uas_pbdprak'; // Database name
 
     // Create connection
     $conn = new mysqli($host, $username, $password, $database);

@@ -1,8 +1,0 @@
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-        .container { max-width: 400px; margin: 40px auto; background: #f7f7f7; padding: 24px; border-radius: 8px; }
-        label { display: block; margin-bottom: 6px; }
-        input { width: 100%; padding: 8px; margin-bottom: 14px; border: 1px solid #ccc; border-radius: 4px; }
-        button { background: #4FC3F7; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; }
-        button:hover { background: #039be5; }
-        .msg { color: red; margin-bottom: 10px; }
-            

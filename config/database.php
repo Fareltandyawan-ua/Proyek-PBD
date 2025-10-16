@@ -1,7 +1,7 @@
 <?php
 try {
     $host = 'localhost';
-    $dbname = 'uts_pbdprak';
+    $dbname = 'uas_pbdprak';
     $username = 'root';
     $password = '';
     

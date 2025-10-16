@@ -137,9 +137,7 @@ if ($_POST) {
                             <small class="text-muted">
                                 <strong>Demo Accounts:</strong><br>
                                 Admin: admin / admin123<br>
-                                Kasir: kasir1 / kasir123<br>
-                                Gudang: gudang1 / gudang123<br>
-                                Pemilik: pemilik1 / pemilik123
+                                Super Admin: superadmin / superadmin123
                             </small>
                         </div>
                     </div>
