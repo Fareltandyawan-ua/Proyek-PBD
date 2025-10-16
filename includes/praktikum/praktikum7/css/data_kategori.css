@@ -1,0 +1,155 @@
+.kategori-container {
+  max-width: 600px;
+  margin: 32px auto;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px #0001;
+  padding: 32px;
+}
+
+.kategori-container h2 {
+  text-align: center;
+  color: #222;
+  margin-bottom: 24px;
+}
+
+form {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+input[type="text"] {
+  padding: 8px;
+  border: 1px solid #b7e4c7;
+  border-radius: 5px;
+  min-width: 180px;
+}
+
+button,
+a.button {
+  background: #4fc3f7;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+button:hover,
+a.button:hover {
+  background: #0288d1;
+}
+
+a.batal {
+  background: #adb5bd;
+  color: #222;
+  margin-left: 8px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+}
+
+th,
+td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #b7e4c7;
+  text-align: left;
+}
+
+th {
+  background: #b7e4c7;
+  color: #222;
+}
+
+tr:nth-child(even) {
+  background: #f1faee;
+}
+
+.aksi-link {
+  margin-right: 8px;
+}
+
+/* Tombol Kembali */
+.btn-kembali {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, #3498db, #5dade2);
+    color: white;
+    text-decoration: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    margin-top: 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-kembali::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #2980b9, #3498db);
+    transition: left 0.3s ease;
+    z-index: -1;
+}
+
+.btn-kembali:hover::before {
+    left: 0;
+}
+
+.btn-kembali:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-kembali:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(52, 152, 219, 0.3);
+}
+
+.btn-icon {
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: transform 0.3s ease;
+}
+
+.btn-kembali:hover .btn-icon {
+    transform: translateX(-3px);
+}
+
+.btn-text {
+    transition: transform 0.3s ease;
+}
+
+.btn-kembali:hover .btn-text {
+    transform: translateX(2px);
+}
+
+/* Responsif untuk tombol kembali */
+@media (max-width: 480px) {
+    .btn-kembali {
+        padding: 0.7rem 1.2rem;
+        font-size: 0.9rem;
+        border-radius: 20px;
+    }
+    
+    .btn-icon {
+        font-size: 1.1rem;
+    }
+}

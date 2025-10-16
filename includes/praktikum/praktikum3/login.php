@@ -1,0 +1,177 @@
+<?php
+session_start();
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Authentication</title>
+    <link rel="stylesheet" type="text/css" href="slide navbar style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="main">
+        <input type="checkbox" id="chk" aria-hidden="true">
+
+        <div class="login">
+            <form action="login_post.php" method="post">
+                <label for="chk" aria-hidden="true">Login</label>
+                <input type="email" name="email" placeholder="Email" required="">
+                <input type="password" name="password" placeholder="Password" required="">
+                <button>Login</button>
+                <?php 
+                if (isset($_SESSION['flash_msg'])): ?>
+                    <div class="flash-msg <?= isset($_SESSION['flash_success']) && $_SESSION['flash_success'] ? 'success' : 'error' ?>">
+                        <?= $_SESSION['flash_msg']; unset($_SESSION['flash_msg'], $_SESSION['flash_success']); ?>
+                    </div>
+                <?php endif; ?>
+            </form>
+        </div>
+
+        <div class="signup">
+            <form action="proses_registrasi.php" method="post">
+                <label for="chk" aria-hidden="true">Sign Up</label>
+                <input type="text" name="nama" placeholder="Nama" required="">
+                <input type="email" name="email" placeholder="Email" required="">
+                <input type="password" name="password" placeholder="Password" required="">
+                <input type="password" name="retype_password" placeholder="Retype Password" required="">
+                <button>Sign Up</button>
+                <?php 
+                if (isset($_SESSION['flash_msg'])): ?>
+                    <div class="flash-msg <?= isset($_SESSION['flash_success']) && $_SESSION['flash_success'] ? 'success' : 'error' ?>">
+                        <?= $_SESSION['flash_msg']; unset($_SESSION['flash_msg'], $_SESSION['flash_success']); ?>
+                    </div>
+                <?php endif; ?>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        font-family: 'Jost', sans-serif;
+        background: linear-gradient(to bottom, #6bd1f9ff, #FFFFFF);
+    }
+
+    .main {
+        width: 350px;
+        height: 500px;
+        background: red;
+        overflow: hidden;
+        background: url("https://doc-08-2c-docs.googleusercontent.com/docs/securesc/68c90smiglihng9534mvqmq1946dmis5/fo0picsp1nhiucmc0l25s29respgpr4j/1631524275000/03522360960922298374/03522360960922298374/1Sx0jhdpEpnNIydS4rnN4kHSJtU1EyWka?e=view&authuser=0&nonce=gcrocepgbb17m&user=03522360960922298374&hash=tfhgbs86ka6divo3llbvp93mg4csvb38") no-repeat center/ cover;
+        border-radius: 10px;
+        box-shadow: 5px 20px 50px #000;
+    }
+
+    #chk {
+        display: none;
+    }
+
+    .login {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    .signup {
+        height: 460px;
+        background: #ffffffff;
+        border-radius: 60% / 10%;
+        transform: translateY(-180px);
+        transition: .8s ease-in-out;
+    }
+
+    label {
+        color: #fff;
+        font-size: 2.3em;
+        justify-content: center;
+        display: flex;
+        margin: 50px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: .5s ease-in-out;
+    }
+
+    input {
+        width: 60%;
+        height: 10px;
+        background: #e6e5e5ff;
+        justify-content: center;
+        display: flex;
+        margin: 20px auto;
+        padding: 12px;
+        border: none;
+        outline: none;
+        border-radius: 5px;
+    }
+
+    button {
+        width: 60%;
+        height: 40px;
+        margin: 10px auto;
+        justify-content: center;
+        display: block;
+        color: #fff;
+        background: #00b7eb;
+        font-size: 1em;
+        font-weight: bold;
+        margin-top: 30px;
+        outline: none;
+        border: none;
+        border-radius: 5px;
+        transition: .2s ease-in;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #05a7ffff;
+    }
+
+    .login label {
+        color: #007bc7ff;
+    }
+
+    .login input {
+        background: #fff;
+    }
+
+    .signup label {
+        color: #0067a8ff;
+        transform: scale(.6);
+    }
+
+    #chk:checked~.signup {
+        transform: translateY(-500px);
+    }
+
+    #chk:checked~.signup label {
+        transform: scale(1);
+    }
+
+    #chk:checked~.login label {
+        transform: scale(.6);
+    }
+
+    .flash-msg {
+        margin-top: 15px; /* Menempatkan pesan di bawah tombol */
+        padding: 10px;
+        border-radius: 4px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .flash-msg.success {
+        color: #219150;
+    }
+
+    .flash-msg.error {
+        color: #d32f2f;
+    }
+</style>
