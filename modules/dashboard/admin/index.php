@@ -1,9 +1,10 @@
 <?php
-session_start();
-require_once '../../classes/Auth.php';
-require_once '../../classes/Dashboard.php';
+require_once '../../../classes/Auth.php';
+require_once '../../../classes/Dashboard.php';
 
 $auth = new Auth();
+$auth->checkLogin([1]);
+
 $dashboard = new Dashboard();
 
 // Check login
@@ -257,7 +258,7 @@ $recentBarang = $dashboard->getRecentBarang();
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><h6 class="dropdown-header"><?= htmlspecialchars($userData['role_name']) ?></h6></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-danger" href="../auth/logout.php">
+                        <li><a class="dropdown-item text-danger" href="../../auth/logout.php">
                             <i class="fas fa-sign-out-alt me-2"></i>Logout
                         </a></li>
                     </ul>

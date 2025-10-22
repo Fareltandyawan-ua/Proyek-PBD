@@ -1,11 +1,20 @@
 <?php
+session_start();
 require_once '../../classes/Auth.php';
 
 $auth = new Auth();
 
-// Redirect jika sudah login
+// Jika sudah login, arahkan ke dashboard sesuai role
 if ($auth->isLoggedIn()) {
-    header('Location: ../dashboard/index.php');
+    $role = $_SESSION['role_name'] ?? '';
+
+    if ($role === 'Admin') {
+        header('Location: ../dashboard/admin/index.php');
+    } elseif ($role === 'Super Admin') {
+        header('Location: ../dashboard/superadmin/index.php');
+    } else {
+        header('Location: ../dashboard/index.php');
+    }
     exit;
 }
 
@@ -18,8 +27,18 @@ if ($_POST) {
     if (empty($username) || empty($password)) {
         $error = 'Username dan password harus diisi!';
     } else {
+        // Login berhasil
         if ($auth->login($username, $password)) {
-            header('Location: ../dashboard/index.php');
+            // Ambil data role dari session (diset oleh Auth::login)
+            $role = $_SESSION['role_name'] ?? '';
+
+            if ($role === 'Admin') {
+                header('Location: ../dashboard/admin/index.php');
+            } elseif ($role === 'Super Admin') {
+                header('Location: ../dashboard/superadmin/index.php');
+            } else {
+                header('Location: ../dashboard/index.php');
+            }
             exit;
         } else {
             $error = 'Username atau password salah!';
@@ -27,6 +46,7 @@ if ($_POST) {
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="id">

@@ -1,7 +1,7 @@
 <?php
 class Database {
     private $host = 'localhost';
-    private $dbname = 'uts_pbdprak';
+    private $dbname = 'uas_pbdprak';
     private $username = 'root';
     private $password = '';
     private $pdo;

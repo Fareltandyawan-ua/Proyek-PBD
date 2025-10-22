@@ -48,7 +48,7 @@ class Dashboard {
     
     public function getRecentBarang($limit = 5) {
         try {
-            return $this->db->fetchAll("SELECT * FROM barang WHERE status = 1 ORDER BY idbarang DESC LIMIT ?", [$limit]);
+            return $this->db->fetchAll("SELECT * FROM V_BARANG_DETAIL LIMIT ?", [$limit]);
         } catch(Exception $e) {
             return [];
         }

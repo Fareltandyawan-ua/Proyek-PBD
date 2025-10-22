@@ -1,33 +1,50 @@
 <?php
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
+session_start();
+require_once 'Auth.php';
+require_once 'DBConnection.php';
 
-function checkLogin() {
-    if (!isset($_SESSION['user_id'])) {
-        header('Location: ../auth/login.php');
-        exit;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = $_POST['username'] ?? '';
+    $password = $_POST['password'] ?? '';
+
+    try {
+        $db = new DBConnection();
+        $db->init_connect();
+        $dbconn = $db->dbconn;
+
+        // Ambil data user dan role
+        $query = "SELECT u.*, r.nama_role 
+                  FROM user u 
+                  JOIN role r ON u.idrole = r.idrole 
+                  WHERE username = ? AND password = ?";
+        $stmt = $dbconn->prepare($query);
+        $stmt->execute([$username, $password]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($user) {
+            $_SESSION['user'] = [
+                'iduser' => $user['iduser'],
+                'username' => $user['username'],
+                'role' => $user['nama_role']
+            ];
+
+            // Arahkan berdasarkan role
+            if ($user['nama_role'] === 'Admin') {
+                header("Location: dashboard/admin/index.php");
+                exit;
+            } elseif ($user['nama_role'] === 'Super Admin') {
+                header("Location: dashboard/superadmin/index.php");
+                exit;
+            } else {
+                header("Location: login.php?error=Role tidak dikenal");
+                exit;
+            }
+        } else {
+            header("Location: login.php?error=Username atau password salah");
+            exit;
+        }
+    } catch (PDOException $e) {
+        die("Koneksi gagal: " . $e->getMessage());
     }
-}
-
-function checkRole($allowed_roles = []) {
-    checkLogin();
-    
-    if (!empty($allowed_roles) && !in_array($_SESSION['role_id'], $allowed_roles)) {
-        header('Location: ../dashboard/index.php?error=access_denied');
-        exit;
-    }
-}
-
-function getUserRole() {
-    return $_SESSION['role_name'] ?? '';
-}
-
-function getUserId() {
-    return $_SESSION['user_id'] ?? 0;
-}
-
-function getUsername() {
-    return $_SESSION['username'] ?? '';
 }
 ?>
