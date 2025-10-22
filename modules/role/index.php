@@ -1,22 +1,22 @@
 <?php
 require_once '../../classes/Auth.php';
-require_once '../../classes/Vendor.php';
+require_once '../../classes/Database.php';
 
 $auth = new Auth();
-$auth->checkRole([1]); // hanya admin
+$auth->checkRole([2]); // hanya superadmin
 
-$vendorObj = new Vendor();
-$vendorList = $vendorObj->getAll();
+$db = new Database();
+$roles = $db->fetchAll("SELECT * FROM role ORDER BY idrole ASC");
 
 $success = $_GET['success'] ?? '';
 $error = $_GET['error'] ?? '';
 ?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Data Vendor - Dashboard Admin</title>
+  <title>Kelola Role - Superadmin</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
@@ -35,23 +35,22 @@ $error = $_GET['error'] ?? '';
 
 <nav class="navbar navbar-dark fixed-top">
   <div class="container-fluid">
-    <span class="navbar-brand fw-bold"><i class="fas fa-truck me-2"></i>Data Vendor</span>
-    <a href="../dashboard/admin/index.php" class="btn btn-light btn-sm"><i class="fas fa-home me-1"></i> Dashboard</a>
+    <span class="navbar-brand fw-bold"><i class="fas fa-shield-alt me-2"></i>Kelola Role</span>
+    <a href="../dashboard/superadmin/index.php" class="btn btn-light btn-sm"><i class="fas fa-home me-1"></i> Dashboard</a>
   </div>
 </nav>
 
 <div class="sidebar">
-  <a href="../dashboard/admin/index.php"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
-  <a href="../barang/index.php"><i class="fas fa-box me-2"></i>Data Barang</a>
-  <a href="../satuan/index.php"><i class="fas fa-weight me-2"></i>Data Satuan</a>
-  <a href="#" class="active"><i class="fas fa-truck me-2"></i>Data Vendor</a>
+  <a href="../dashboard/superadmin/index.php"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
+  <a href="../user/index.php"><i class="fas fa-users me-2"></i>Kelola User</a>
+  <a href="#" class="active"><i class="fas fa-user-shield me-2"></i>Kelola Role</a>
   <a href="../auth/logout.php" class="text-danger"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
 </div>
 
 <div class="main-content">
   <div class="header-card d-flex justify-content-between align-items-center">
-    <h4 class="mb-0"><i class="fas fa-building me-2"></i>Daftar Vendor</h4>
-    <a href="tambah.php" class="btn btn-success btn-sm"><i class="fas fa-plus me-1"></i>Tambah Vendor</a>
+    <h4 class="mb-0"><i class="fas fa-id-badge me-2"></i>Daftar Role</h4>
+    <a href="tambah.php" class="btn btn-success btn-sm"><i class="fas fa-plus me-1"></i>Tambah Role</a>
   </div>
 
   <div class="card p-3">
@@ -60,31 +59,20 @@ $error = $_GET['error'] ?? '';
         <thead>
           <tr>
             <th>ID</th>
-            <th>Nama Vendor</th>
-            <th>Badan Hukum</th>
-            <th>Status</th>
+            <th>Nama Role</th>
             <th class="text-center">Aksi</th>
           </tr>
         </thead>
         <tbody>
-          <?php if (empty($vendorList)): ?>
-            <tr><td colspan="5" class="text-center text-muted py-4"><i class="fas fa-inbox fa-2x mb-2 d-block"></i>Tidak ada data vendor.</td></tr>
-          <?php else: foreach ($vendorList as $v): ?>
+          <?php if (empty($roles)): ?>
+            <tr><td colspan="3" class="text-center text-muted py-4"><i class="fas fa-inbox fa-2x mb-2 d-block"></i>Tidak ada data role.</td></tr>
+          <?php else: foreach ($roles as $r): ?>
             <tr>
-              <td><?= $v['idvendor'] ?></td>
-              <td><strong><?= htmlspecialchars($v['nama_vendor']) ?></strong></td>
-              <td><?= htmlspecialchars($v['badan_hukum']) ?></td>
-              <td>
-                <?= ($v['status'] == 'A')
-                      ? '<span class="badge bg-success"><i class="fas fa-check"></i> Aktif</span>'
-                      : '<span class="badge bg-secondary"><i class="fas fa-ban"></i> Nonaktif</span>' ?>
-              </td>
+              <td><?= $r['idrole'] ?></td>
+              <td><strong><?= htmlspecialchars($r['nama_role']) ?></strong></td>
               <td class="text-center">
-                <a href="edit.php?id=<?= $v['idvendor'] ?>" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
-                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalDelete" 
-                        data-id="<?= $v['idvendor'] ?>" data-nama="<?= htmlspecialchars($v['nama_vendor']) ?>">
-                  <i class="fas fa-trash"></i>
-                </button>
+                <a href="edit.php?id=<?= $r['idrole'] ?>" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
+                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalDelete" data-id="<?= $r['idrole'] ?>" data-nama="<?= htmlspecialchars($r['nama_role']) ?>"><i class="fas fa-trash"></i></button>
               </td>
             </tr>
           <?php endforeach; endif; ?>
@@ -94,7 +82,7 @@ $error = $_GET['error'] ?? '';
   </div>
 </div>
 
-<!-- Modal Delete -->
+<!-- Modal Hapus -->
 <div class="modal fade" id="modalDelete" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content border-0 shadow">
@@ -102,16 +90,13 @@ $error = $_GET['error'] ?? '';
         <h5 class="modal-title"><i class="fas fa-exclamation-triangle me-2"></i>Konfirmasi Hapus</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
-      <form action="process.php?action=delete" method="POST">
-        <div class="modal-body">
-          <p>Yakin ingin menghapus vendor <strong id="delete-nama"></strong>?</p>
-          <input type="hidden" name="idvendor" id="delete-id">
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-          <button type="submit" class="btn btn-danger">Hapus</button>
-        </div>
-      </form>
+      <div class="modal-body">
+        <p>Apakah Anda yakin ingin menghapus role <strong id="delete-nama"></strong>?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+        <a href="#" id="confirmDelete" class="btn btn-danger">Hapus</a>
+      </div>
     </div>
   </div>
 </div>
@@ -120,8 +105,8 @@ $error = $_GET['error'] ?? '';
 <?php if ($success): ?>
   <div class="alert alert-success alert-custom alert-dismissible fade show">
     <i class="fas fa-check-circle me-2"></i>
-    <?= ($success == 'added') ? "Vendor berhasil ditambahkan!" :
-        (($success == 'updated') ? "Vendor berhasil diperbarui!" : "Vendor berhasil dihapus!") ?>
+    <?= ($success == 'added') ? "Role berhasil ditambahkan!" :
+        (($success == 'updated') ? "Role berhasil diperbarui!" : "Role berhasil dihapus!") ?>
     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
   </div>
 <?php elseif ($error): ?>
@@ -133,11 +118,13 @@ $error = $_GET['error'] ?? '';
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-  const modalDelete = document.getElementById('modalDelete');
-  modalDelete.addEventListener('show.bs.modal', event => {
+  const deleteModal = document.getElementById('modalDelete');
+  deleteModal.addEventListener('show.bs.modal', event => {
     const button = event.relatedTarget;
-    document.getElementById('delete-id').value = button.getAttribute('data-id');
-    document.getElementById('delete-nama').textContent = button.getAttribute('data-nama');
+    const id = button.getAttribute('data-id');
+    const nama = button.getAttribute('data-nama');
+    document.getElementById('delete-nama').textContent = nama;
+    document.getElementById('confirmDelete').setAttribute('href', 'process.php?action=delete&id=' + id);
   });
   setTimeout(() => {
     const alert = document.querySelector('.alert-custom');

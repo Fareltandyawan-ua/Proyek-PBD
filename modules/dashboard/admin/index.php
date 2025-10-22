@@ -277,17 +277,17 @@ $recentBarang = $dashboard->getRecentBarang();
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../barang/index.php">
+                    <a class="nav-link" href="../../barang/index.php">
                         <i class="fas fa-box me-2"></i>Data Barang
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../satuan/index.php">
+                    <a class="nav-link" href="../../satuan/index.php">
                         <i class="fas fa-weight me-2"></i>Data Satuan
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../vendor/index.php">
+                    <a class="nav-link" href="../../vendor/index.php">
                         <i class="fas fa-truck me-2"></i>Data Vendor
                     </a>
                 </li>
