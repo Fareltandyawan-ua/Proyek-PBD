@@ -22,6 +22,7 @@ $recentBarang = $dashboard->getRecentBarang();
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -45,14 +46,14 @@ $recentBarang = $dashboard->getRecentBarang();
 
         .navbar {
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             height: 56px;
         }
 
         .sidebar {
             background: #fff;
             min-height: calc(100vh - 56px);
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
             position: fixed;
             top: 56px;
             left: 0;
@@ -77,15 +78,17 @@ $recentBarang = $dashboard->getRecentBarang();
 
         .main-content {
             margin-left: 250px;
-            margin-top: 56px; /* Add margin top for navbar */
-            padding: 30px 20px 20px 20px; /* Add extra top padding */
+            margin-top: 56px;
+            /* Add margin top for navbar */
+            padding: 30px 20px 20px 20px;
+            /* Add extra top padding */
             min-height: calc(100vh - 56px);
         }
 
         .card {
             border: none;
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
             transition: transform 0.3s ease;
             margin-bottom: 20px;
         }
@@ -120,16 +123,28 @@ $recentBarang = $dashboard->getRecentBarang();
             color: white;
         }
 
-        .icon-primary { background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%); }
-        .icon-success { background: linear-gradient(135deg, var(--success-color) 0%, #00b894 100%); }
-        .icon-warning { background: linear-gradient(135deg, var(--warning-color) 0%, #e84393 100%); }
-        .icon-info { background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%); }
+        .icon-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        }
+
+        .icon-success {
+            background: linear-gradient(135deg, var(--success-color) 0%, #00b894 100%);
+        }
+
+        .icon-warning {
+            background: linear-gradient(135deg, var(--warning-color) 0%, #e84393 100%);
+        }
+
+        .icon-info {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+        }
 
         .welcome-card {
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             color: white;
             margin-bottom: 30px !important;
-            min-height: 120px; /* Ensure minimum height */
+            min-height: 120px;
+            /* Ensure minimum height */
         }
 
         .welcome-card .card-body {
@@ -178,11 +193,11 @@ $recentBarang = $dashboard->getRecentBarang();
                 margin-left: -250px;
                 transition: margin-left 0.3s ease;
             }
-            
+
             .sidebar.show {
                 margin-left: 0;
             }
-            
+
             .main-content {
                 margin-left: 0;
                 padding: 20px 15px;
@@ -238,6 +253,7 @@ $recentBarang = $dashboard->getRecentBarang();
         }
     </style>
 </head>
+
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
@@ -251,16 +267,21 @@ $recentBarang = $dashboard->getRecentBarang();
             </a>
             <div class="navbar-nav ms-auto">
                 <div class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button"
+                        data-bs-toggle="dropdown">
                         <i class="fas fa-user-circle me-2"></i>
                         <?= htmlspecialchars($userData['username']) ?>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><h6 class="dropdown-header"><?= htmlspecialchars($userData['role_name']) ?></h6></li>
-                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <h6 class="dropdown-header"><?= htmlspecialchars($userData['role_name']) ?></h6>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
                         <li><a class="dropdown-item text-danger" href="../../auth/logout.php">
-                            <i class="fas fa-sign-out-alt me-2"></i>Logout
-                        </a></li>
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </a></li>
                     </ul>
                 </div>
             </div>
@@ -291,41 +312,57 @@ $recentBarang = $dashboard->getRecentBarang();
                         <i class="fas fa-truck me-2"></i>Data Vendor
                     </a>
                 </li>
-                <!-- <li class="nav-item">
-                    <a class="nav-link" href="../user/index.php">
-                        <i class="fas fa-users me-2"></i>Data User
+                <li class="nav-item">
+                    <a class="nav-link" href="../../margin/index.php">
+                        <i class="fas fa-truck me-2"></i>Margin Penjualan
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../pengadaan/index.php">
-                        <i class="fas fa-shopping-cart me-2"></i>Pengadaan
+                    <a class="nav-link" href="../../kartu_stok/index.php">
+                        <i class="fas fa-truck me-2"></i>Kartu Stok
                     </a>
                 </li>
+                <style>
+                    a[data-bs-toggle="collapse"] i.fa-chevron-right {
+                        transition: transform 0.2s ease-in-out;
+                    }
+                    a[data-bs-toggle="collapse"][aria-expanded="true"] i.fa-chevron-right {
+                        transform: rotate(90deg);
+                    }
+                </style>
+                <!-- Menu Transaksi -->
                 <li class="nav-item">
-                    <a class="nav-link" href="../penerimaan/index.php">
-                        <i class="fas fa-clipboard-check me-2"></i>Penerimaan
+                    <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
+                        href="#collapseTransaksi" role="button" aria-expanded="false" aria-controls="collapseTransaksi">
+                        <span><i class="fas fa-exchange-alt me-2"></i>Transaksi</span>
+                        <i class="fas fa-chevron-right small"></i>
+                    </a>
+                    <div class="collapse ps-3" id="collapseTransaksi">
+                        <ul class="nav flex-column ms-2 mt-1">
+                            <li class="nav-item">
+                                <a class="nav-link py-1" href="../../transaksi/pengadaan/index.php">
+                                    <i class="fas fa-boxes me-2"></i>Pengadaan
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link py-1" href="../../transaksi/penerimaan/index.php">
+                                    <i class="fas fa-inbox me-2"></i>Penerimaan
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link py-1" href="../../transaksi/penjualan/index.php">
+                                    <i class="fas fa-shopping-cart me-2"></i>Penjualan
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item mt-2">
+                    <a class="nav-link text-danger" href="../../auth/logout.php">
+                        <i class="fas fa-sign-out-alt me-2"></i>Logout
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="../penjualan/index.php">
-                        <i class="fas fa-cash-register me-2"></i>Penjualan
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="../retur/index.php">
-                        <i class="fas fa-undo me-2"></i>Retur
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="../margin/index.php">
-                        <i class="fas fa-percentage me-2"></i>Margin
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="../kartu_stok/index.php">
-                        <i class="fas fa-clipboard-list me-2"></i>Kartu Stok
-                    </a>
-                </li> -->
             </ul>
         </div>
     </nav>
@@ -338,7 +375,9 @@ $recentBarang = $dashboard->getRecentBarang();
                 <div class="row align-items-center">
                     <div class="col-md-8 col-sm-7">
                         <h3>Selamat Datang, <?= htmlspecialchars($userData['username']) ?>!</h3>
-                        <p class="mb-1 opacity-75">Anda login sebagai <strong><?= htmlspecialchars($userData['role_name']) ?></strong></p>
+                        <p class="mb-1 opacity-75">Anda login sebagai
+                            <strong><?= htmlspecialchars($userData['role_name']) ?></strong>
+                        </p>
                         <small class="opacity-75">Dashboard Sistem Pengadaan - <?= date('d F Y') ?></small>
                     </div>
                     <div class="col-md-4 col-sm-5 text-end">
@@ -446,33 +485,40 @@ $recentBarang = $dashboard->getRecentBarang();
                                 </thead>
                                 <tbody>
                                     <?php if (empty($recentBarang)): ?>
-                                    <tr>
-                                        <td colspan="4" class="text-center text-muted py-4">
-                                            <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
-                                            Belum ada data barang
-                                        </td>
-                                    </tr>
-                                    <?php else: ?>
-                                        <?php foreach ($recentBarang as $barang): ?>
                                         <tr>
-                                            <td><strong><?= $barang['idbarang'] ?></strong></td>
-                                            <td><?= htmlspecialchars($barang['nama']) ?></td>
-                                            <td>
-                                                <?php
-                                                switch($barang['jenis']) {
-                                                    case '1': echo '<span class="badge bg-primary">Makanan</span>'; break;
-                                                    case '2': echo '<span class="badge bg-info">Minuman</span>'; break;
-                                                    case '3': echo '<span class="badge bg-success">Bahan Pokok</span>'; break;
-                                                    default: echo '<span class="badge bg-secondary">Lainnya</span>';
-                                                }
-                                                ?>
-                                            </td>
-                                            <td>
-                                                <span class="badge bg-success">
-                                                    <i class="fas fa-check me-1"></i>Aktif
-                                                </span>
+                                            <td colspan="4" class="text-center text-muted py-4">
+                                                <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
+                                                Belum ada data barang
                                             </td>
                                         </tr>
+                                    <?php else: ?>
+                                        <?php foreach ($recentBarang as $barang): ?>
+                                            <tr>
+                                                <td><strong><?= $barang['idbarang'] ?></strong></td>
+                                                <td><?= htmlspecialchars($barang['nama']) ?></td>
+                                                <td>
+                                                    <?php
+                                                    switch ($barang['jenis']) {
+                                                        case '1':
+                                                            echo '<span class="badge bg-primary">Makanan</span>';
+                                                            break;
+                                                        case '2':
+                                                            echo '<span class="badge bg-info">Minuman</span>';
+                                                            break;
+                                                        case '3':
+                                                            echo '<span class="badge bg-success">Bahan Pokok</span>';
+                                                            break;
+                                                        default:
+                                                            echo '<span class="badge bg-secondary">Lainnya</span>';
+                                                    }
+                                                    ?>
+                                                </td>
+                                                <td>
+                                                    <span class="badge bg-success">
+                                                        <i class="fas fa-check me-1"></i>Aktif
+                                                    </span>
+                                                </td>
+                                            </tr>
                                         <?php endforeach; ?>
                                     <?php endif; ?>
                                 </tbody>
@@ -486,14 +532,15 @@ $recentBarang = $dashboard->getRecentBarang();
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.getElementById('sidebarToggle')?.addEventListener('click', function() {
+        document.getElementById('sidebarToggle')?.addEventListener('click', function () {
             document.getElementById('sidebar').classList.toggle('show');
         });
 
         // Auto refresh statistics setiap 30 detik
-        setInterval(function() {
+        setInterval(function () {
             // Bisa ditambahkan AJAX untuk refresh data statistik
         }, 30000);
     </script>
 </body>
+
 </html>

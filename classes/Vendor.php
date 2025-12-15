@@ -10,7 +10,7 @@ class Vendor {
 
     // Ambil semua data vendor
     public function getAll() {
-        return $this->db->fetchAll("SELECT * FROM vendor ORDER BY idvendor ASC");
+        return $this->db->fetchAll("SELECT * FROM v_vendor ORDER BY idvendor ASC");
     }
 
     // Ambil satu data vendor berdasarkan ID

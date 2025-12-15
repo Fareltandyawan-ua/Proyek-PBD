@@ -1,0 +1,296 @@
+<?php
+require_once '../../../classes/Auth.php';
+require_once '../../../classes/Penerimaan.php';
+
+$auth = new Auth();
+$auth->checkRole([1]);
+
+$penerimaan = new Penerimaan();
+
+// Ambil semua data penerimaan
+$penerimaanList = $penerimaan->getAll();
+
+$success = $_GET['success'] ?? '';
+$error = $_GET['error'] ?? '';
+?>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Penerimaan</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar {
+            background: #fff;
+            width: 250px;
+            position: fixed;
+            top: 56px;
+            bottom: 0;
+            left: 0;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+            padding-top: 20px;
+            overflow-y: auto;
+        }
+
+        .sidebar a, .sidebar .nav-link {
+            color: #495057;
+            display: block;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin: 5px 15px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active,
+        .sidebar .nav-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white !important;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+            margin-top: 70px;
+        }
+
+        .header-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 20px 25px;
+            margin-bottom: 25px;
+        }
+
+        table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        .badge-custom {
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        a[data-bs-toggle="collapse"] i.fa-chevron-right {
+            transition: transform 0.2s ease-in-out;
+        }
+
+        a[data-bs-toggle="collapse"][aria-expanded="true"] i.fa-chevron-right {
+            transform: rotate(90deg);
+        }
+
+        .btn-action {
+            padding: 5px 12px;
+            font-size: 13px;
+            margin: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark fixed-top">
+        <div class="container-fluid">
+            <span class="navbar-brand fw-bold">
+                <i class="fas fa-inbox me-2"></i>Manajemen Penerimaan Barang
+            </span>
+            <a href="../../dashboard/admin/index.php" class="btn btn-light btn-sm">
+                <i class="fas fa-home me-1"></i> Dashboard
+            </a>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <a href="../../dashboard/admin/index.php">
+            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+        </a>
+        <a href="../../barang/index.php">
+            <i class="fas fa-box me-2"></i>Data Barang
+        </a>
+        <a href="../../satuan/index.php">
+            <i class="fas fa-weight me-2"></i>Data Satuan
+        </a>
+        <a href="../../vendor/index.php">
+            <i class="fas fa-truck me-2"></i>Data Vendor
+        </a>
+        <a href="../../margin/index.php">
+            <i class="fas fa-chart-line me-2"></i>Margin Penjualan
+        </a>
+        <a href="../../kartu_stok/index.php">
+            <i class="fas fa-chart-line me-2"></i>Kartu Stok
+        </a>
+        
+        <!-- Dropdown Transaksi -->
+        <a class="nav-link d-flex justify-content-between align-items-center" 
+           data-bs-toggle="collapse" 
+           href="#collapseTransaksi" 
+           role="button" 
+           aria-expanded="true">
+            <span><i class="fas fa-exchange-alt me-2"></i>Transaksi</span>
+            <i class="fas fa-chevron-right small"></i>
+        </a>
+        <div class="collapse show ps-3" id="collapseTransaksi">
+            <div class="ms-2 mt-1">
+                <a class="nav-link py-2" href="../pengadaan/index.php">
+                    <i class="fas fa-boxes me-2"></i>Pengadaan
+                </a>
+                <a class="nav-link active py-2" href="index.php">
+                    <i class="fas fa-inbox me-2"></i>Penerimaan
+                </a>
+                <a class="nav-link py-2" href="../penjualan/index.php">
+                    <i class="fas fa-shopping-cart me-2"></i>Penjualan
+                </a>
+            </div>
+        </div>
+
+        <a href="../../auth/logout.php" class="text-danger">
+            <i class="fas fa-sign-out-alt me-2"></i>Logout
+        </a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        
+        <!-- Header -->
+        <div class="header-card d-flex flex-wrap justify-content-between align-items-center">
+            <div>
+                <h4 class="mb-1 fw-bold">
+                    <i class="fas fa-inbox me-2"></i>Daftar Penerimaan Barang
+                </h4>
+                <small class="text-white-50">Kelola transaksi penerimaan barang dari vendor</small>
+            </div>
+            <a href="tambah.php" class="btn btn-light fw-semibold shadow-sm">
+                <i class="fas fa-plus me-1"></i> Tambah Penerimaan
+            </a>
+        </div>
+
+        <!-- Alert Messages -->
+        <?php if ($success): ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle me-2"></i>
+                <?= htmlspecialchars($success) ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        <?php endif; ?>
+        
+        <?php if ($error): ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                <?= htmlspecialchars($error) ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        <?php endif; ?>
+
+        <!-- Table -->
+        <div class="card shadow-sm">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th width="5%" class="text-center">No</th>
+                                <th width="15%">ID Penerimaan</th>
+                                <th width="15%">Tanggal</th>
+                                <th width="12%">PO / Pengadaan</th>
+                                <th width="18%">Vendor</th>
+                                <th width="10%" class="text-center">Status</th>
+                                <th width="10%">Penerima</th>
+                                <th width="15%" class="text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (empty($penerimaanList)): ?>
+                                <tr>
+                                    <td colspan="8" class="text-center text-muted py-4">
+                                        <i class="fas fa-inbox fa-2x mb-3 d-block"></i>
+                                        Belum ada data penerimaan.
+                                    </td>
+                                </tr>
+                            <?php else:
+                                foreach ($penerimaanList as $index => $r): ?>
+                                    <tr>
+                                        <td class="text-center"><?= $index + 1 ?></td>
+                                        <td>
+                                            <span class="badge bg-primary badge-custom">
+                                                #<?= $r['idpenerimaan'] ?>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <small>
+                                                <?= $r['created_at'] ? date('d M Y', strtotime($r['created_at'])) : '-' ?>
+                                                <br>
+                                                <span class="text-muted">
+                                                    <?= $r['created_at'] ? date('H:i', strtotime($r['created_at'])) : '' ?>
+                                                </span>
+                                            </small>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-info badge-custom">
+                                                PO #<?= $r['idpengadaan'] ?>
+                                            </span>
+                                        </td>
+                                        <td><?= htmlspecialchars($r['nama_vendor'] ?? '-') ?></td>
+                                        <td class="text-center">
+                                            <?php if (strtolower($r['status'] ?? '') === 's'): ?>
+                                                <span class="badge bg-success badge-custom">
+                                                    <i class="fas fa-check-circle me-1"></i>Selesai
+                                                </span>
+                                            <?php else: ?>
+                                                <span class="badge bg-warning text-dark badge-custom">
+                                                    <i class="fas fa-clock me-1"></i>Proses
+                                                </span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td><?= htmlspecialchars($r['penerima'] ?? '-') ?></td>
+                                        <td>
+                                            <a href="edit.php?idpenerimaan=<?= $r['idpenerimaan'] ?>"
+                                               class="btn btn-warning btn-sm"
+                                               title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="detail.php?idpenerimaan=<?= $r['idpenerimaan'] ?>"
+                                               class="btn btn-info btn-sm text-white btn-action"
+                                               title="Lihat Detail">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="hapus.php?idpenerimaan=<?= $r['idpenerimaan'] ?>" 
+                                               class="btn btn-danger btn-sm btn-action"
+                                               title="Hapus"
+                                               onclick="return confirm('⚠️ Yakin ingin menghapus penerimaan ini?\n\n- Semua detail akan terhapus\n- Stok barang akan dikurangi\n- Status pengadaan akan diupdate');">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; 
+                            endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

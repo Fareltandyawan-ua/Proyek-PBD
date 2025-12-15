@@ -6,7 +6,24 @@ $auth = new Auth();
 $auth->checkRole([1]); // hanya admin
 
 $db = new Database();
-$barangList = $db->fetchAll("SELECT * FROM V_BARANG_DETAIL ORDER BY idbarang ASC");
+
+$statusFilter = $_GET['status'] ?? '1';
+
+try {
+    if ($statusFilter === '1') {
+        // Barang aktif (gunakan view khusus)
+        $barangList = $db->fetchAll("SELECT * FROM v_barang_aktif ORDER BY idbarang ASC");
+    } elseif ($statusFilter === '0') {
+        // Barang tidak aktif
+        $barangList = $db->fetchAll("SELECT * FROM v_barang WHERE status_barang = 0 ORDER BY idbarang ASC");
+    } else {
+        // Semua barang
+        $barangList = $db->fetchAll("SELECT * FROM v_barang ORDER BY idbarang ASC");
+    }
+} catch (Exception $e) {
+    die("Terjadi kesalahan: " . $e->getMessage());
+}
+
 
 $success = $_GET['success'] ?? '';
 $error = $_GET['error'] ?? '';
@@ -112,7 +129,8 @@ $error = $_GET['error'] ?? '';
     <nav class="navbar navbar-dark fixed-top">
         <div class="container-fluid">
             <span class="navbar-brand fw-bold"><i class="fas fa-box me-2"></i>Data Barang</span>
-            <a href="../dashboard/admin/index.php" class="btn btn-light btn-sm"><i class="fas fa-home me-1"></i> Dashboard</a>
+            <a href="../dashboard/admin/index.php" class="btn btn-light btn-sm"><i class="fas fa-home me-1"></i>
+                Dashboard</a>
         </div>
     </nav>
 
@@ -122,25 +140,101 @@ $error = $_GET['error'] ?? '';
         <a href="#" class="active"><i class="fas fa-box me-2"></i>Data Barang</a>
         <a href="../satuan/index.php"><i class="fas fa-weight me-2"></i>Data Satuan</a>
         <a href="../vendor/index.php"><i class="fas fa-truck me-2"></i>Data Vendor</a>
+        <a href="../margin/index.php"><i class="fas fa-chart-line me-2"></i>Margin Penjualan</a>
+        <a href="../kartu_stok/index.php"><i class="fas fa-chart-line me-2"></i>Kartu Stok</a>
+        <style>
+            a[data-bs-toggle="collapse"] i.fa-chevron-right {
+                transition: transform 0.2s ease-in-out;
+            }
+
+            a[data-bs-toggle="collapse"][aria-expanded="true"] i.fa-chevron-right {
+                transform: rotate(90deg);
+            }
+        </style>
+        <li class="nav-item">
+            <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
+                href="#collapseTransaksi" role="button" aria-expanded="false" aria-controls="collapseTransaksi">
+                <span><i class="fas fa-exchange-alt me-2"></i>Transaksi</span>
+                <i class="fas fa-chevron-right small"></i>
+            </a>
+            <div class="collapse ps-3" id="collapseTransaksi">
+                <ul class="nav flex-column ms-2 mt-1">
+                    <li class="nav-item">
+                        <a class="nav-link py-1" href="../transaksi/pengadaan/index.php">
+                            <i class="fas fa-boxes me-2"></i>Pengadaan
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link py-1" href="../transaksi/penerimaan/index.php">
+                            <i class="fas fa-inbox me-2"></i>Penerimaan
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link py-1" href="../transaksi/penjualan/index.php">
+                            <i class="fas fa-shopping-cart me-2"></i>Penjualan
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
         <a href="../auth/logout.php" class="text-danger"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
     </div>
 
     <!-- Main Content -->
     <div class="main-content">
         <!-- Header -->
-        <div class="header-card d-flex justify-content-between align-items-center">
-            <h4 class="mb-0"><i class="fas fa-cubes me-2"></i>Daftar Barang</h4>
-            <a href="tambah.php" class="btn btn-success btn-sm"><i class="fas fa-plus me-1"></i>Tambah Barang</a>
+        <!-- Header -->
+        <div class="header-card">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                <!-- Judul -->
+                <h4 class="mb-0 d-flex align-items-center text-white">
+                    <i class="fas fa-cubes me-2"></i>Daftar Barang
+                </h4>
+
+                <!-- Area kanan: pencarian + filter + tombol tambah -->
+                <div class="d-flex flex-wrap align-items-center gap-2">
+                    <!-- Form Pencarian -->
+                    <!-- <form method="GET" class="d-flex align-items-center">
+                        <input type="text" name="keyword" class="form-control form-control-sm me-2"
+                            placeholder="Cari barang..." value="<?= $_GET['keyword'] ?? '' ?>"
+                            style="min-width: 200px;">
+                        <button class="btn btn-sm btn-primary"><i class="fas fa-search me-1"></i>Cari</button>
+                    </form> -->
+
+                    <!-- Dropdown Filter -->
+                    <form method="GET" class="d-flex align-items-center">
+                        <label for="status" class="me-2 fw-semibold text-white mb-0">Tampilkan:</label>
+                        <select name="status" id="status" class="form-select form-select-sm"
+                            onchange="this.form.submit()" style="min-width: 140px;">
+                            <option value="" <?= (isset($_GET['status']) && $_GET['status'] === '') ? 'selected' : '' ?>>
+                                Semua Barang</option>
+                            <option value="1" <?= (!isset($_GET['status']) || $_GET['status'] === '1') ? 'selected' : '' ?>>
+                                Aktif</option>
+                            <option value="0" <?= (isset($_GET['status']) && $_GET['status'] === '0') ? 'selected' : '' ?>>
+                                Tidak Aktif</option>
+                        </select>
+                    </form>
+
+                    <!-- Tombol Tambah Barang -->
+                    <a href="tambah.php" class="btn btn-success btn-sm">
+                        <i class="fas fa-plus me-1"></i>Tambah Barang
+                    </a>
+                </div>
+            </div>
         </div>
+
 
         <!-- Alert -->
         <?php if ($success): ?>
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <i class="fas fa-check-circle me-2"></i>
-                <?php 
-                    if ($success == 'added') echo "Barang berhasil ditambahkan!";
-                    elseif ($success == 'updated') echo "Barang berhasil diperbarui!";
-                    elseif ($success == 'deleted') echo "Barang berhasil dihapus!";
+                <?php
+                if ($success == 'added')
+                    echo "Barang berhasil ditambahkan!";
+                elseif ($success == 'updated')
+                    echo "Barang berhasil diperbarui!";
+                elseif ($success == 'deleted')
+                    echo "Barang berhasil dihapus!";
                 ?>
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
@@ -157,10 +251,11 @@ $error = $_GET['error'] ?? '';
                 <table class="table table-hover align-middle">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>No</th>
                             <th>Nama Barang</th>
                             <th>Jenis Barang</th>
                             <th>Satuan</th>
+                            <th>Harga</th>
                             <th>Status</th>
                             <th class="text-center">Aksi</th>
                         </tr>
@@ -174,27 +269,29 @@ $error = $_GET['error'] ?? '';
                                 </td>
                             </tr>
                         <?php else: ?>
-                            <?php foreach ($barangList as $b): ?>
+                            <?php foreach ($barangList as $i => $b): ?>
                                 <tr>
-                                    <td><?= $b['idbarang'] ?></td>
+                                    <td><?= $i + 1 ?></td>
                                     <td><strong><?= htmlspecialchars($b['nama_barang']) ?></strong></td>
                                     <td><?= htmlspecialchars($b['jenis_barang']) ?></td>
                                     <td><?= htmlspecialchars($b['nama_satuan']) ?></td>
+                                    <td><?= htmlspecialchars($b['harga'] ?? '') ?></td>
                                     <td>
-                                        <?php if ($b['status_barang'] === 'Aktif'): ?>
+                                    <td>
+                                        <?php if ($b['status_barang'] == 1): ?>
                                             <span class="badge bg-success"><i class="fas fa-check"></i> Aktif</span>
                                         <?php else: ?>
                                             <span class="badge bg-secondary"><i class="fas fa-ban"></i> Tidak Aktif</span>
                                         <?php endif; ?>
                                     </td>
+
+                                    </td>
                                     <td class="text-center">
                                         <a href="edit.php?id=<?= $b['idbarang'] ?>" class="btn btn-warning btn-sm btn-custom">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <button type="button" class="btn btn-danger btn-sm btn-custom"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#modalDelete"
-                                            data-id="<?= $b['idbarang'] ?>"
+                                        <button type="button" class="btn btn-danger btn-sm btn-custom" data-bs-toggle="modal"
+                                            data-bs-target="#modalDelete" data-id="<?= $b['idbarang'] ?>"
                                             data-nama="<?= htmlspecialchars($b['nama_barang']) ?>">
                                             <i class="fas fa-trash"></i>
                                         </button>
@@ -248,4 +345,5 @@ $error = $_GET['error'] ?? '';
         }, 3000);
     </script>
 </body>
+
 </html>

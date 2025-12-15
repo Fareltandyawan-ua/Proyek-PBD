@@ -2,77 +2,72 @@
 include '../../config/database.php';
 include '../../includes/functions.php';
 
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
-    $query = "SELECT * FROM margin_penjualan WHERE idmargin_penjualan = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
-    $result = $stmt->get_result();
+if (!isset($_GET['id'])) {
+    exit('ID tidak ditemukan');
+}
+$id = $_GET['id'];
 
-    if ($result->num_rows > 0) {
-        $margin = $result->fetch_assoc();
-    } else {
-        header("Location: index.php?error=Margin not found");
-        exit();
-    }
-} else {
-    header("Location: index.php?error=Invalid request");
-    exit();
+// Ambil data margin_penjualan
+$stmt = $pdo->prepare("SELECT * FROM margin_penjualan WHERE idmargin_penjualan = ?");
+$stmt->execute([$id]);
+$margin = $stmt->fetch();
+
+if (!$margin) {
+    exit('Data margin tidak ditemukan!');
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $persen = $_POST['persen'];
-    $status = $_POST['status'];
+    $iduser = $_POST['iduser']; // Pastikan ambil dari session atau input
 
-    $updateQuery = "UPDATE margin_penjualan SET persen = ?, status = ? WHERE idmargin_penjualan = ?";
-    $updateStmt = $conn->prepare($updateQuery);
-    $updateStmt->bind_param("ssi", $persen, $status, $id);
-
-    if ($updateStmt->execute()) {
-        header("Location: index.php?success=Margin updated successfully");
-        exit();
-    } else {
-        $error = "Error updating margin: " . $conn->error;
-    }
+    $stmt = $pdo->prepare("UPDATE margin_penjualan SET persen = ?, status = ?, iduser = ?, updated_at = NOW() WHERE idmargin_penjualan = ?");
+    $stmt->execute([$persen, $status, $iduser, $id]);
+    header("Location: index.php?success=updated");
+    exit;
 }
+
+// Ambil user untuk dropdown (opsional)
+$stmtUser = $pdo->query("SELECT iduser, username FROM user");
+$userList = $stmtUser->fetchAll();
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../assets/css/style.css">
-    <title>Edit Margin</title>
+    <title>Edit Margin Penjualan</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <?php include '../../includes/header.php'; ?>
-    <?php include '../../includes/sidebar.php'; ?>
-
-    <div class="container mt-5">
-        <h2>Edit Margin</h2>
-        <?php if (isset($error)) { echo "<div class='alert alert-danger'>$error</div>"; } ?>
-        <form action="" method="POST">
-            <div class="form-group">
-                <label for="persen">Persen</label>
-                <input type="text" class="form-control" id="persen" name="persen" value="<?php echo $margin['persen']; ?>" required>
+<div class="container mt-5">
+    <div class="card p-4">
+        <h4 class="mb-3">Edit Margin Penjualan</h4>
+        <form method="post">
+            <div class="mb-3">
+                <label>Persentase Margin (%)</label>
+                <input type="number" name="persen" class="form-control" value="<?= htmlspecialchars($margin['persen']) ?>" required>
             </div>
-            <div class="form-group">
-                <label for="status">Status</label>
-                <select class="form-control" id="status" name="status" required>
-                    <option value="1" <?php echo ($margin['status'] == 1) ? 'selected' : ''; ?>>Active</option>
-                    <option value="0" <?php echo ($margin['status'] == 0) ? 'selected' : ''; ?>>Inactive</option>
+            <div class="mb-3">
+                <label>Status</label>
+                <select name="status" class="form-select" required>
+                    <option value="1" <?= $margin['status'] == 1 ? 'selected' : '' ?>>Aktif</option>
+                    <option value="0" <?= $margin['status'] == 0 ? 'selected' : '' ?>>Tidak Aktif</option>
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary">Update Margin</button>
-            <a href="index.php" class="btn btn-secondary">Cancel</a>
+            <div class="mb-3">
+                <label>User</label>
+                <select name="iduser" class="form-select" required>
+                    <?php foreach ($userList as $u): ?>
+                        <option value="<?= $u['iduser'] ?>" <?= $margin['iduser'] == $u['iduser'] ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($u['username']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Simpan</button>
+            <a href="index.php" class="btn btn-secondary">Batal</a>
         </form>
     </div>
-
-    <?php include '../../includes/footer.php'; ?>
-    <script src="../../assets/js/jquery.min.js"></script>
-    <script src="../../assets/js/bootstrap.bundle.min.js"></script>
+</div>
 </body>
 </html>

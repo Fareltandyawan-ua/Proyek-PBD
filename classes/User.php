@@ -17,7 +17,7 @@ class User {
     }
 
     public function getById($id) {
-        return $this->db->fetch("SELECT * FROM user WHERE iduser = ?", [$id]);
+        return $this->db->fetch("SELECT * FROM v_user WHERE iduser = ?", [$id]);
     }
 
     public function add($username, $password, $idrole, $status) {

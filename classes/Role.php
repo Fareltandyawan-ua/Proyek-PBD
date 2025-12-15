@@ -9,7 +9,7 @@ class Role {
     }
 
     public function getAll() {
-        return $this->db->fetchAll("SELECT * FROM role ORDER BY idrole ASC");
+        return $this->db->fetchAll("SELECT * FROM v_role ORDER BY idrole ASC");
     }
 
     public function getById($id) {

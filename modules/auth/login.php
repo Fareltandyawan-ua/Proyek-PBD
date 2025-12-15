@@ -3,33 +3,20 @@ session_start();
 require_once '../../classes/Auth.php';
 
 $auth = new Auth();
-
-// Jika sudah login, arahkan ke dashboard sesuai role
-if ($auth->isLoggedIn()) {
-    $role = $_SESSION['role_name'] ?? '';
-
-    if ($role === 'Admin') {
-        header('Location: ../dashboard/admin/index.php');
-    } elseif ($role === 'Super Admin') {
-        header('Location: ../dashboard/superadmin/index.php');
-    } else {
-        header('Location: ../dashboard/index.php');
-    }
-    exit;
-}
-
 $error = '';
 
-if ($_POST) {
-    $username = trim($_POST['username']);
-    $password = trim($_POST['password']);
-    
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = trim($_POST['username'] ?? '');
+    $password = trim($_POST['password'] ?? '');
+
     if (empty($username) || empty($password)) {
         $error = 'Username dan password harus diisi!';
     } else {
-        // Login berhasil
         if ($auth->login($username, $password)) {
-            // Ambil data role dari session (diset oleh Auth::login)
+            // Ambil data user dari Auth (pastikan Auth punya method getUser)
+            $user = $auth->getUser();
+            $_SESSION['iduser'] = $user['iduser']; // Simpan iduser ke session
+
             $role = $_SESSION['role_name'] ?? '';
 
             if ($role === 'Admin') {

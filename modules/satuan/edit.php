@@ -1,17 +1,19 @@
 <?php
 require_once '../../classes/Auth.php';
-require_once '../../classes/Satuan.php';
+require_once '../../classes/Database.php';
 
 $auth = new Auth();
-$auth->checkRole([1]);
+$auth->checkRole([1]); // hanya admin
 
-$satuan = new Satuan();
+$db = new Database();
 $id = $_GET['id'] ?? 0;
-$data = $satuan->getById($id);
 
-if (!$data) {
-    die("Data tidak ditemukan");
+// ambil data satuan berdasarkan ID
+$satuan = $db->fetch("SELECT * FROM satuan WHERE idsatuan = ?", [$id]);
+if (!$satuan) {
+  die("Data tidak ditemukan");
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -40,12 +42,19 @@ if (!$data) {
     <hr>
 
     <form action="process.php?action=update" method="POST">
-      <input type="hidden" name="idsatuan" value="<?= $data['idsatuan'] ?>">
+      <input type="hidden" name="idsatuan" value="<?= $satuan['idsatuan'] ?>">
 
       <div class="mb-3">
         <label class="form-label fw-semibold">Nama Satuan</label>
-        <input type="text" name="nama_satuan" class="form-control" value="<?= htmlspecialchars($data['nama_satuan']) ?>" required>
+        <input type="text" name="nama_satuan" class="form-control" value="<?= htmlspecialchars($satuan['nama_satuan']) ?>" required>
       </div>
+      <div class="mb-3">
+          <label class="form-label fw-semibold">Status</label>
+          <select name="status" class="form-select" required>
+            <option value="1" <?= ($satuan['status'] == 1) ? 'selected' : '' ?>>Aktif</option>
+            <option value="0" <?= ($satuan['status'] == 0) ? 'selected' : '' ?>>Nonaktif</option>
+          </select>
+        </div>
 
       <div class="text-end">
         <button type="submit" class="btn btn-gradient px-4">

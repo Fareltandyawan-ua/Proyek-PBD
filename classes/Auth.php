@@ -23,10 +23,11 @@ class Auth
 
             $user = $this->db->fetch($sql, [$username]);
 
+            // Ganti dengan password_verify jika password di-hash
             if ($user && $password === $user['password']) {
-                $_SESSION['user_id'] = $user['iduser'];
-                $_SESSION['username'] = $user['username'];
-                $_SESSION['role_id'] = $user['idrole'];
+                $_SESSION['iduser']    = $user['iduser'];
+                $_SESSION['username']  = $user['username'];
+                $_SESSION['role_id']   = $user['idrole'];
                 $_SESSION['role_name'] = $user['nama_role'];
                 return true;
             }
@@ -34,6 +35,20 @@ class Auth
         } catch (Exception $e) {
             return false;
         }
+    }
+
+    // Ambil data user dari session
+    public function getUser()
+    {
+        if (isset($_SESSION['iduser'])) {
+            return [
+                'iduser'    => $_SESSION['iduser'],
+                'username'  => $_SESSION['username'],
+                'role_id'   => $_SESSION['role_id'],
+                'role_name' => $_SESSION['role_name']
+            ];
+        }
+        return null;
     }
 
     public function logout()
@@ -45,7 +60,7 @@ class Auth
 
     public function checkLogin()
     {
-        if (!isset($_SESSION['user_id'])) {
+        if (!isset($_SESSION['iduser'])) {
             header('Location: ../auth/login.php');
             exit;
         }
@@ -68,28 +83,19 @@ class Auth
         }
     }
 
-
     public function isLoggedIn()
     {
-        return isset($_SESSION['user_id']);
+        return isset($_SESSION['iduser']);
     }
 
     public function getUserData()
     {
-        if ($this->isLoggedIn()) {
-            return [
-                'id' => $_SESSION['user_id'],
-                'username' => $_SESSION['username'],
-                'role_id' => $_SESSION['role_id'],
-                'role_name' => $_SESSION['role_name']
-            ];
-        }
-        return null;
+        return $this->getUser();
     }
 
     public function getUserId()
     {
-        return $_SESSION['user_id'] ?? 0;
+        return $_SESSION['iduser'] ?? 0;
     }
 
     public function getUsername()

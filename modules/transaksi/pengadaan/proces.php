@@ -1,19 +1,15 @@
 <?php
-require_once '../../classes/Satuan.php';
-$satuan = new Satuan();
-
-$action = $_GET['action'] ?? '';
 
 try {
     if ($action === 'add') {
-        $satuan->add($_POST);
+        $barang->add($_POST);
         header("Location: index.php?success=added");
     } elseif ($action === 'update') {
-        $satuan->update($_POST['idsatuan'], $_POST);
+        $barang->update($_POST['idbarang'], $_POST);
         header("Location: index.php?success=updated");
     } elseif ($action === 'delete') {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') die("Akses tidak sah!");
-        $satuan->delete($_POST['idsatuan']);
+        $barang->delete($_POST['idbarang']);
         header("Location: index.php?success=deleted");
     } else {
         throw new Exception("Aksi tidak valid!");
@@ -23,3 +19,5 @@ try {
     header("Location: index.php?error=" . urlencode($e->getMessage()));
     exit;
 }
+
+?>
